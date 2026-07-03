@@ -38,9 +38,11 @@ federal deadline timeline](docs/assets/overview.png)
 - **Registry-driven classification.** Group and signature identifiers map to
   readiness classes through YAML registries (`config/registry/`), so a newly
   standardized identifier is a data change, not a code change.
-- **Statistics built in.** Wilson score intervals for all proportions,
-  endpoint- and domain-level rates, and McNemar's test (exact binomial for
-  small discordant counts) for the dual-probe comparison.
+- **Statistics built in.** Wilson score intervals for all proportions;
+  endpoint-, domain-, and agency-level rates; McNemar's test (exact binomial
+  for small discordant counts) for the dual-probe comparison; and a
+  two-proportion *z*-test for between-group comparisons (e.g., the mandated
+  population versus a general-population baseline).
 - **Run resilience.** Transient failures are retried, per-target crashes become
   explicit `internal_error` records, results stream to disk per endpoint, and
   interrupted runs continue with `--resume`.
@@ -66,12 +68,17 @@ scripts/download_asn_db.sh             # IP->ASN snapshot (optional)
 export PQR_OPENSSL_BIN=/path/to/openssl-3.6
 
 pqreadiness run --config config/default.yaml --limit 150    # pilot
-pqreadiness run --config config/default.yaml --resume       # continue a run
+pqreadiness run --config config/federal.yaml  --resume      # full federal .gov census
+pqreadiness run --config config/tranco.yaml   --resume      # general-population baseline
 pqreadiness analyze data/processed/results.csv              # summary tables
 pqreadiness plot    data/processed/results.csv              # figures
 
 python -m pqreadiness.tools.pqscan example.gov              # single endpoint
 ```
+
+The federal and Tranco configs share one instrument, so the baseline is
+directly comparable. The general-population list is read via a `plainlist`
+input format (rank,domain), selectable per config.
 
 `make test`, `make lint`, and `make typecheck` run the quality gates
 (pytest / ruff / mypy).
@@ -80,18 +87,19 @@ python -m pqreadiness.tools.pqscan example.gov              # single endpoint
 
 ```
 src/pqreadiness/
-  ingest/     CISA registry parsing, tiering, endpoint expansion
+  ingest/     CISA registry parsing, tiering, endpoint expansion (+ plain-list
+              format for general-population baselines)
   resolve/    DNS resolution (IPv4-preferred)
   probe/      dual-probe handshakes + active certificate fetch (OpenSSL)
   classify/   registry-driven key-exchange / authentication classes
   enrich/     hosting attribution (ASN + CNAME signals)
   pipeline/   per-target orchestration, retries, crash isolation, concurrency
   storage/    output schema, streaming CSV/JSONL writers, resume support
-  analysis/   aggregation (endpoint/domain/tier/hosting), Wilson, McNemar
+  analysis/   aggregation (endpoint/domain/tier/hosting/agency), Wilson, McNemar
   viz/        headless figures
   tools/      pqscan — standalone single-host detector
 config/       run configuration + classification registries (YAML)
-scripts/      input downloads, pilot runner
+scripts/      input downloads, pilot runner, Certificate Transparency sweep
 tests/        unit tests for classification, statistics, parsing, attribution
 docs/         architecture and output-schema reference
 ```

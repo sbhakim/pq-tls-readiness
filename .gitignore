@@ -44,7 +44,15 @@ runs/
 .vscode/
 .idea/
 .DS_Store
+Thumbs.db
 *.swp
+*.swo
+*~
+
+# Merge / backup artifacts
+*.orig
+*.bak
+*.tmp
 
 # Logs
 *.log
