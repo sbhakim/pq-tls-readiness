@@ -1,10 +1,8 @@
-# pqreadiness
+# Measuring Post-Quantum TLS Readiness at Scale
 
-**Measuring post-quantum TLS readiness of enumerable endpoint populations.**
-
-`pqreadiness` is a terminal-only measurement pipeline that quantifies, for every
-HTTPS endpoint in a population, the two independent halves of the post-quantum
-TLS migration:
+**`pqreadiness`** is a terminal-only measurement pipeline that quantifies, for
+every HTTPS endpoint in a population, the two independent halves of the
+post-quantum TLS migration:
 
 1. **Key exchange** — does the server *support* a hybrid/post-quantum group
    (e.g., `X25519MLKEM768`), independent of what a given client happens to
