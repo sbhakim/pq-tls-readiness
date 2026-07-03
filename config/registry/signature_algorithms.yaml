@@ -1,0 +1,31 @@
+# Certificate signature algorithms, mapped to a readiness class.
+# class is one of: classical | pq
+#
+# Matching is done on a normalized (lowercased, de-spaced) substring of the
+# algorithm string that OpenSSL prints for the certificate.
+
+signatures:
+  # --- Classical ---
+  - name: rsa
+    match: ["rsaencryption", "sha256withrsa", "sha384withrsa", "sha512withrsa", "rsassapss"]
+    class: classical
+  - name: ecdsa
+    match: ["ecdsa-with-sha256", "ecdsa-with-sha384", "ecdsa-with-sha512", "ecdsawithsha"]
+    class: classical
+  - name: ed25519
+    match: ["ed25519"]
+    class: classical
+  - name: ed448
+    match: ["ed448"]
+    class: classical
+
+  # --- Post-quantum ---
+  - name: ml-dsa
+    match: ["ml-dsa", "mldsa", "dilithium"]
+    class: pq
+  - name: slh-dsa
+    match: ["slh-dsa", "slhdsa", "sphincs"]
+    class: pq
+  - name: falcon
+    match: ["falcon", "fn-dsa", "fndsa"]
+    class: pq

@@ -1,0 +1,45 @@
+# TLS named groups (key exchange), mapped to a readiness class.
+# class is one of: classical | hybrid_pq | pure_pq
+#
+# Keep this list current as PQ identifiers get standardized. Draft aliases are
+# kept alongside final names so old captures still classify correctly.
+
+groups:
+  # --- Classical ---
+  - name: x25519
+    aliases: ["X25519"]
+    class: classical
+  - name: secp256r1
+    aliases: ["P-256", "prime256v1"]
+    class: classical
+  - name: secp384r1
+    aliases: ["P-384"]
+    class: classical
+  - name: secp521r1
+    aliases: ["P-521"]
+    class: classical
+  - name: x448
+    aliases: ["X448"]
+    class: classical
+
+  # --- Hybrid (classical + PQ KEM) ---
+  - name: x25519mlkem768
+    aliases: ["X25519MLKEM768", "x25519_kyber768", "X25519Kyber768Draft00"]
+    class: hybrid_pq
+  - name: secp256r1mlkem768
+    aliases: ["SecP256r1MLKEM768", "p256_kyber768"]
+    class: hybrid_pq
+  - name: secp384r1mlkem1024
+    aliases: ["SecP384r1MLKEM1024"]
+    class: hybrid_pq
+
+  # --- Pure PQ KEM ---
+  - name: mlkem512
+    aliases: ["MLKEM512"]
+    class: pure_pq
+  - name: mlkem768
+    aliases: ["MLKEM768"]
+    class: pure_pq
+  - name: mlkem1024
+    aliases: ["MLKEM1024"]
+    class: pure_pq

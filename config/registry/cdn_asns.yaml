@@ -1,0 +1,83 @@
+# Known CDN / edge-cloud autonomous systems, used to tag an endpoint as
+# CDN vs origin. Extend as you discover more in your population.
+# (Expanded after the pilot: federal .gov mostly self-hosts, so accurate CDN
+#  labeling matters for the attribution finding.)
+
+cdns:
+  # Major CDNs
+  - asn: 13335
+    name: Cloudflare
+  - asn: 20940
+    name: Akamai
+  - asn: 16625
+    name: Akamai
+  - asn: 12222
+    name: Akamai
+  - asn: 54113
+    name: Fastly
+  - asn: 15133
+    name: Edgecast / Verizon
+  - asn: 22822
+    name: Limelight / Edgio
+  - asn: 20446
+    name: StackPath / Highwinds
+  - asn: 60068
+    name: CDN77
+  - asn: 19551
+    name: Imperva / Incapsula
+
+  # Cloud providers that also serve edge/CDN for .gov
+  - asn: 16509
+    name: AWS
+  - asn: 14618
+    name: AWS
+  - asn: 15169
+    name: Google
+  - asn: 396982
+    name: Google Cloud
+  - asn: 8075
+    name: Microsoft Azure
+  - asn: 8068
+    name: Microsoft Azure
+
+# CDN hostname suffixes matched against the endpoint's CNAME chain. This
+# catches CDN-fronted hosts whose IP the ASN database cannot attribute
+# (IPv6-first resolution, missing prefixes) and disambiguates cloud ASNs
+# that serve both CDN and plain hosting.
+cname_suffixes:
+  - suffix: cloudfront.net
+    name: AWS CloudFront
+  - suffix: edgekey.net
+    name: Akamai
+  - suffix: edgesuite.net
+    name: Akamai
+  - suffix: akamaiedge.net
+    name: Akamai
+  - suffix: akamaized.net
+    name: Akamai
+  - suffix: cdn.cloudflare.net
+    name: Cloudflare
+  - suffix: fastly.net
+    name: Fastly
+  - suffix: fastlylb.net
+    name: Fastly
+  - suffix: azureedge.net
+    name: Microsoft Azure CDN
+  - suffix: azurefd.net
+    name: Microsoft Azure Front Door
+  - suffix: trafficmanager.net
+    name: Microsoft Azure Traffic Manager
+  - suffix: edgecastcdn.net
+    name: Edgecast / Edgio
+  - suffix: llnwd.net
+    name: Limelight / Edgio
+  - suffix: incapdns.net
+    name: Imperva / Incapsula
+  - suffix: cdn77.org
+    name: CDN77
+  # Federal shared platforms: readiness on these endpoints is inherited from
+  # the platform operator (GSA), not configured by the owning agency.
+  - suffix: cloud.gov
+    name: GSA cloud.gov
+  - suffix: app.cloud.gov
+    name: GSA cloud.gov
