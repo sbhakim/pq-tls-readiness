@@ -18,9 +18,13 @@ from .profiles import Profile
 #  - PQ/hybrid groups:  "Negotiated TLS1.3 group: X25519MLKEM768"
 #  - classical groups:  "Peer Temp Key: X25519, 253 bits"
 #                   or  "Peer Temp Key: ECDH, P-256, 256 bits"
-_GROUP_RE = re.compile(r"Negotiated TLS1\.3 group:\s*(\S+)", re.IGNORECASE)
-_TEMPKEY_RE = re.compile(r"Peer Temp Key:\s*(.+)", re.IGNORECASE)
-_PROTO_RE = re.compile(r"Protocol version:\s*(\S+)", re.IGNORECASE)
+_GROUP_RE = re.compile(r"^Negotiated TLS1\.3 group:\s*(\S+)", re.IGNORECASE | re.MULTILINE)
+_TEMPKEY_RE = re.compile(r"^Peer Temp Key:\s*(.+)", re.IGNORECASE | re.MULTILINE)
+# Anchored to line start: OpenSSL *error* strings can contain the words
+# "protocol version:" mid-line (e.g. "tlsv1 alert protocol version:ssl/..."),
+# which an unanchored match would extract as a bogus TLS version and
+# misclassify the endpoint as reachable.
+_PROTO_RE = re.compile(r"^Protocol version:\s*(\S+)", re.IGNORECASE | re.MULTILINE)
 # openssl prints this once the handshake completes, regardless of group type.
 _ESTABLISHED = "CONNECTION ESTABLISHED"
 
@@ -77,6 +81,8 @@ def _error_category(text: str, timed_out: bool) -> str:
         return "dns_failed"
     if "no suitable key share" in lower or "bad key share" in lower:
         return "unsupported_group"
+    if "alert protocol version" in lower:
+        return "no_tls13"  # alert 70: server rejects TLS 1.3
     if "alert" in lower:
         return "tls_alert"
     if "wrong version number" in lower or "unsupported protocol" in lower:
