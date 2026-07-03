@@ -17,6 +17,12 @@ measurement instrument behind the paper *"From Mandate to Migration: An
 Empirical Study of Post-Quantum TLS Readiness in U.S. Government Web
 Infrastructure"* and reproduces every number, table, and figure it reports.
 
+## At a glance
+
+![Study overview: the post-quantum key-exchange versus authentication gap in
+U.S. federal TLS, the measurement pipeline, hosting attribution, and the
+federal deadline timeline](docs/assets/overview.png)
+
 ## Method
 
 - **Dual-probe capability measurement.** Each endpoint is probed under a
