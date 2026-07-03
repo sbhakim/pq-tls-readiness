@@ -1,0 +1,45 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pqreadiness"
+version = "0.1.0"
+description = "Measure post-quantum TLS readiness of a population of HTTPS endpoints."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+authors = [{ name = "PQ Readiness Team" }]
+
+dependencies = [
+    "PyYAML>=6.0",
+    "pandas>=2.0",
+    "matplotlib>=3.7",
+    "pyasn>=1.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "pytest-cov>=4.1",
+    "ruff>=0.1",
+    "mypy>=1.5",
+]
+
+# The `pqreadiness` command maps to the CLI entry point.
+[project.scripts]
+pqreadiness = "pqreadiness.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+ignore_missing_imports = true

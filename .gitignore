@@ -1,0 +1,50 @@
+# ---------------------------------------------------------------------------
+# pqreadiness — repository hygiene
+# Measurement inputs and results never enter version control: raw inputs are
+# re-downloadable (scripts/), and results are the paper's evidence artifact,
+# archived separately. Only code, config, tests, and docs are tracked.
+# ---------------------------------------------------------------------------
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+.venv/
+venv/
+
+# Tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+.ipynb_checkpoints/
+
+# Measurement data: keep the directory skeleton, drop the contents.
+#   raw/       CISA .gov lists, routing snapshots (re-download via scripts/)
+#   interim/   scratch space
+#   processed/ scan results, figures (never published in-repo)
+data/raw/*
+data/interim/*
+data/processed/*
+!data/**/.gitkeep
+
+# Archived measurement rounds (results-federal-r0.csv etc.)
+runs/
+
+# Local environment and machine-specific overrides
+.env
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+*.swp
+
+# Logs
+*.log

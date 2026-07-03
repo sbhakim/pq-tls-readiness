@@ -1,0 +1,9 @@
+# Runtime dependencies for pqreadiness.
+# Lower bounds are the versions the study was executed and tested with
+# (Python 3.11, OpenSSL 3.6.3); see pyproject.toml for packaging metadata
+# and the [dev] extra (pytest, ruff, mypy).
+PyYAML>=6.0
+pandas>=2.0
+matplotlib>=3.7
+pyasn>=1.6          # optional at runtime: without it (or its database),
+                    # CDN attribution degrades gracefully to CNAME-only
