@@ -51,6 +51,7 @@ class Scanner:
             domain=target.domain,
             hostname=target.hostname,
             tier=target.tier,
+            agency=target.agency,
         )
 
         # 1) DNS. Skip everything else if the host does not resolve.
@@ -154,6 +155,7 @@ class Scanner:
                 domain=target.domain,
                 hostname=target.hostname,
                 tier=target.tier,
+                agency=target.agency,
             )
             record.notes = f"internal_error: {type(exc).__name__}: {exc}"[:200]
             return record

@@ -1,0 +1,28 @@
+# Full federal census run (R0). Same pipeline as default; separate outputs.
+input:
+  domains_csv: data/raw/current-federal.csv
+  format: dotgov
+  hostname_variants: ["apex", "www"]
+probe:
+  openssl_bin: openssl
+  port: 443
+  connect_timeout_s: 10
+  retries: 1
+  profiles: ["classical", "hybrid_capable"]
+resolve:
+  dns_timeout_s: 5
+enrich:
+  cdn_asns: config/registry/cdn_asns.yaml
+  asn_db: data/raw/ipasn.dat
+concurrency:
+  max_workers: 30
+  per_host_delay_s: 0.0
+output:
+  results_csv: data/processed/results-federal-r0.csv
+  results_jsonl: data/processed/results-federal-r0.jsonl
+  figures_dir: data/processed/figures
+registry:
+  named_groups: config/registry/named_groups.yaml
+  signature_algorithms: config/registry/signature_algorithms.yaml
+logging:
+  level: INFO

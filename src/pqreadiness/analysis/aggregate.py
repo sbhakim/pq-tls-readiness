@@ -79,3 +79,31 @@ def domain_level_gap(df: pd.DataFrame) -> dict[str, Proportion]:
         "pq_key_exchange": wilson_interval(int(pq_kex.sum()), total),
         "pq_authentication": wilson_interval(int(pq_auth.sum()), total),
     }
+
+
+def by_agency(df: pd.DataFrame) -> pd.DataFrame:
+    """Domain-level readiness per owning agency.
+
+    The mandate binds agencies, not domains, so this is the compliance view:
+    one row per agency with reachable-domain counts and PQ key-exchange /
+    authentication rates under any-endpoint semantics.
+    """
+    reachable = df[df["reachable"] == True]  # noqa: E712 (pandas mask needs ==)
+    if reachable.empty:
+        return pd.DataFrame(
+            columns=["agency", "domains", "pq_kex_domains", "pq_kex_rate", "pq_auth_domains"]
+        )
+    grouped = reachable.groupby(["agency", "domain"])
+    dom = pd.DataFrame({
+        "pq_kex": grouped["kex_class"].apply(
+            lambda s: bool(s.isin(["hybrid_pq", "pure_pq"]).any())
+        ),
+        "pq_auth": grouped["auth_class"].apply(lambda s: bool((s == "pq").any())),
+    }).reset_index()
+    agg = dom.groupby("agency").agg(
+        domains=("domain", "nunique"),
+        pq_kex_domains=("pq_kex", "sum"),
+        pq_auth_domains=("pq_auth", "sum"),
+    ).reset_index()
+    agg["pq_kex_rate"] = agg["pq_kex_domains"] / agg["domains"]
+    return agg.sort_values(["pq_kex_domains", "domains"], ascending=False)

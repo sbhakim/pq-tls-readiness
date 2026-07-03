@@ -23,7 +23,7 @@ def _hostnames(domain: str, variants: Iterable[str]) -> list[str]:
 
 
 def build_targets(
-    domains: list[tuple[str, Tier]],
+    domains: list[tuple[str, Tier, str]],
     variants: Iterable[str],
 ) -> list[Target]:
     """Build a de-duplicated list of Target objects."""
@@ -31,10 +31,10 @@ def build_targets(
     seen: set[str] = set()
     targets: list[Target] = []
 
-    for domain, tier in domains:
+    for domain, tier, agency in domains:
         for host in _hostnames(domain, variants):
             if host in seen:
                 continue
             seen.add(host)
-            targets.append(Target(domain=domain, hostname=host, tier=tier))
+            targets.append(Target(domain=domain, hostname=host, tier=tier, agency=agency))
     return targets

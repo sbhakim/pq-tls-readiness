@@ -43,6 +43,7 @@ class Target:
     domain: str
     hostname: str
     tier: Tier
+    agency: str = ""
     source: str = "dotgov"
 
 
@@ -106,6 +107,9 @@ class DomainReadiness:
     domain: str
     hostname: str
     tier: Tier
+    # Owning agency ("Organization name" in the CISA registry); the mandate
+    # binds agencies, so results aggregate at this level too.
+    agency: str = ""
 
     reachable: bool = False
     tls_version: str | None = None
