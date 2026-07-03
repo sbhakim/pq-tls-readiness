@@ -21,6 +21,7 @@ from .config import load_config
 from .enrich.asn import build_resolver
 from .enrich.hosting import CdnDirectory
 from .ingest.dotgov import load_domains
+from .ingest.plainlist import load_plain_domains
 from .ingest.targets import build_targets
 from .pipeline.concurrency import map_concurrent
 from .pipeline.runner import Scanner
@@ -42,7 +43,10 @@ def _cmd_run(args: argparse.Namespace) -> int:
     scanner = Scanner(config, registry, cdns, resolver)
 
     # Build the target list, optionally capped for a pilot run.
-    domains = load_domains(config.domains_csv)
+    if config.domains_format == "plainlist":
+        domains = load_plain_domains(config.domains_csv)
+    else:
+        domains = load_domains(config.domains_csv)
     targets = build_targets(domains, config.hostname_variants)
     if args.limit:
         targets = targets[: args.limit]

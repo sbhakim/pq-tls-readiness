@@ -27,6 +27,8 @@ class ProbeConfig:
 @dataclass
 class Config:
     domains_csv: Path
+    # "dotgov" (CISA registry with tiers/agencies) or "plainlist" (rank,domain).
+    domains_format: str
     hostname_variants: list[str]
     probe: ProbeConfig
     dns_timeout_s: int
@@ -60,6 +62,7 @@ def load_config(path: str | Path) -> Config:
 
     return Config(
         domains_csv=Path(raw["input"]["domains_csv"]),
+        domains_format=str(raw["input"].get("format", "dotgov")),
         hostname_variants=list(raw["input"]["hostname_variants"]),
         probe=probe,
         dns_timeout_s=int(raw["resolve"]["dns_timeout_s"]),
